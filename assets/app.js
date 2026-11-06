@@ -74,7 +74,7 @@
         links.forEach((a) => a.classList.toggle('on', a.dataset.spy === en.target.id));
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
-    ['modele', 'o-mnie', 'proces', 'dolacz'].forEach((id) => { const el = document.getElementById(id); if (el) spy.observe(el); });
+    ['modele', 'o-mnie', 'proces', 'dolacz', 'kontakt'].forEach((id) => { const el = document.getElementById(id); if (el) spy.observe(el); });
   }
 
   // ---- hero cursor glow (mouse / trackpad only) ----
