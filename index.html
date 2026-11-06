@@ -14,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Inter:wght@400;500;600&amp;display=swap">
 <link rel="preload" as="image" href="assets/grzegorz.jpg">
-<link rel="stylesheet" href="assets/site.css?v=3">
+<link rel="stylesheet" href="assets/site.css?v=4">
 <script>document.documentElement.classList.add('sk-on')</script>
 <noscript><style>.s{display:none!important}.c{display:contents!important}</style></noscript>
 </head>
@@ -26,18 +26,19 @@
 <header class="nav">
 <div class="wrap nav-in">
 <nav class="nav-l" aria-label="Sekcje">
-<a class="lnk" href="#modele">Modele</a>
-<a class="lnk" href="#o-mnie">O mnie</a>
+<a class="lnk" href="#modele" data-spy="modele">Modele</a>
+<a class="lnk" href="#o-mnie" data-spy="o-mnie">O mnie</a>
 </nav>
 <a class="brand" href="#top" aria-label="Grzegorz Dzikiewicz - strona główna">
 <span class="word"><b>Dzikiewicz</b><span>Warszawski Dealer Nieruchomości</span></span>
 </a>
 <div class="nav-r">
-<a class="lnk" href="#proces">Proces</a>
+<a class="lnk" href="#proces" data-spy="proces">Proces</a>
 <a class="btn btn-gold" href="#dolacz">Dołącz do grupy</a>
 <button class="icon-btn" type="button" aria-label="Otwórz menu" data-open-menu><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"></path></svg></button>
 </div>
 </div>
+<span class="progress" aria-hidden="true"></span>
 </header>
 
 <div class="menu-w" hidden>
@@ -57,6 +58,7 @@
 
 <!-- ============ 1. HERO ============ -->
 <section class="hero dark" aria-label="Grzegorz Dzikiewicz">
+<span class="glow" aria-hidden="true"></span>
 <div class="wrap">
 <div class="c" data-s="1">
 <div class="hero-g fade">
@@ -126,7 +128,7 @@
 <p class="lead">Wybierasz, ile pracy bierzesz na siebie. W obu modelach mój zespół sprawdza każdą okazję od strony prawnej i finansowej.</p>
 </div>
 <div class="models">
-<a class="model" href="#proces">
+<a class="model" href="#proces" data-set-path="aktywny">
 <span class="roman">I.</span>
 <span class="model-k">Inwestycja aktywna</span>
 <h3 class="h3">Okazja, którą kupujesz na siebie</h3>
@@ -138,7 +140,7 @@
 </ul>
 <span class="more">Zobacz proces <svg class="arr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16M14 6l6 6-6 6"></path></svg></span>
 </a>
-<a class="model" href="#proces">
+<a class="model" href="#proces" data-set-path="pasywny">
 <span class="roman">II.</span>
 <span class="model-k">Inwestycja pasywna</span>
 <h3 class="h3">Wspólny flip z moim zespołem</h3>
@@ -181,10 +183,10 @@
 <p class="lead">Realizuję kilkadziesiąt flipów rocznie. Zespół znajduje więcej dobrych mieszkań, niż jestem w stanie kupić, dlatego część z nich przekazuję inwestorom.</p>
 </div>
 <div class="nums">
-<div class="n"><b>10<small>lat</small></b><span>na rynku flipów mieszkań w Warszawie</span></div>
-<div class="n"><b>100</b><span>zrealizowanych flipów</span></div>
-<div class="n"><b>50<small>mln zł</small></b><span>łącznej wartości zrealizowanych flipów</span></div>
-<div class="n"><b>50</b><span>sourcerów pozyskujących okazje</span></div>
+<div class="n"><b><span class="count" data-to="10">10</span><small>lat</small></b><span>na rynku flipów mieszkań w Warszawie</span></div>
+<div class="n"><b><span class="count" data-to="100">100</span></b><span>zrealizowanych flipów</span></div>
+<div class="n"><b><span class="count" data-to="50">50</span><small>mln zł</small></b><span>łącznej wartości zrealizowanych flipów</span></div>
+<div class="n"><b><span class="count" data-to="50">50</span></b><span>sourcerów pozyskujących okazje</span></div>
 </div>
 <div class="film-g">
 <div class="film-copy">
@@ -231,15 +233,21 @@
 <h2 class="h2" id="h-proces">Siedem kroków <em>do Twojej inwestycji</em></h2>
 </div>
 <p class="lead">Kroki 1-3 są wspólne. Inwestora pasywnego po kroku 3 zapraszamy na spotkanie, inwestor aktywny przechodzi do umowy.</p>
+<div class="path" role="group" aria-label="Pokaż kroki dla">
+<button type="button" data-path="all" aria-pressed="true">Wszystkie kroki</button>
+<button type="button" data-path="aktywny" aria-pressed="false">Inwestor aktywny</button>
+<button type="button" data-path="pasywny" aria-pressed="false">Inwestor pasywny</button>
 </div>
-<ol class="steps">
+</div>
+<ol class="steps" data-current="all">
 <li class="step"><span class="step-n">01</span><h3>Dołączasz do grupy</h3><p>Zapisujesz się do grupy sygnałowej na Telegramie oraz na listę mailingową.</p><span class="who">Wszyscy</span></li>
 <li class="step"><span class="step-n">02</span><h3>Dostajesz najlepsze okazje</h3><p>Na Telegramie na bieżąco publikujemy okazje. Na e-mail wysyłamy podsumowanie ostatniego miesiąca.</p><span class="who">Wszyscy</span></li>
 <li class="step"><span class="step-n">03</span><h3>Zgłaszasz zainteresowanie</h3><p>Piszesz na Telegramie, która oferta Cię interesuje. Inwestora pasywnego zapraszamy na spotkanie online lub offline.</p><span class="who">Pasywny · spotkanie</span></li>
-<li class="step"><span class="step-n">04</span><h3>Podpisujesz umowę online</h3><p>Zawieramy umowę na pośrednictwo w zakupie Twojej nieruchomości.</p><span class="who act">Inwestor aktywny</span></li>
-<li class="step"><span class="step-n">05</span><h3>Otrzymujesz dane mieszkania</h3><p>Dostajesz szczegóły nieruchomości, które pozwalają zawrzeć transakcję ze sprzedającym.</p><span class="who act">Inwestor aktywny</span></li>
-<li class="step"><span class="step-n">06</span><h3>Kupujesz nieruchomość</h3><p>Realizujesz transakcję zakupu bezpośrednio ze sprzedającym.</p><span class="who act">Inwestor aktywny</span></li>
-<li class="step"><span class="step-n">07</span><h3>Rozliczamy prowizję</h3><p>Rozliczamy się z pozostałej kwoty prowizji za przekazanie okazji.</p><span class="who act">Inwestor aktywny</span></li>
+<li class="step step-note" data-for="pasywny"><span class="step-n">→</span><h3>Spotkanie i wspólny flip</h3><p>Umawiamy się online lub offline. Ty udostępniasz kapitał, a my prowadzimy zakup, remont i sprzedaż.</p><span class="who act">Inwestor pasywny</span></li>
+<li class="step" data-for="aktywny"><span class="step-n">04</span><h3>Podpisujesz umowę online</h3><p>Zawieramy umowę na pośrednictwo w zakupie Twojej nieruchomości.</p><span class="who act">Inwestor aktywny</span></li>
+<li class="step" data-for="aktywny"><span class="step-n">05</span><h3>Otrzymujesz dane mieszkania</h3><p>Dostajesz szczegóły nieruchomości, które pozwalają zawrzeć transakcję ze sprzedającym.</p><span class="who act">Inwestor aktywny</span></li>
+<li class="step" data-for="aktywny"><span class="step-n">06</span><h3>Kupujesz nieruchomość</h3><p>Realizujesz transakcję zakupu bezpośrednio ze sprzedającym.</p><span class="who act">Inwestor aktywny</span></li>
+<li class="step" data-for="aktywny"><span class="step-n">07</span><h3>Rozliczamy prowizję</h3><p>Rozliczamy się z pozostałej kwoty prowizji za przekazanie okazji.</p><span class="who act">Inwestor aktywny</span></li>
 </ol>
 </div>
 </div>
@@ -306,7 +314,7 @@
 <div class="form-sent" hidden>
 <div class="form done fade" role="status">
 <span class="done-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"></path></svg></span>
-<p class="form-t">Zaproszenie jest gotowe</p>
+<p class="form-t">Gotowe<span class="hello"></span>. Zaproszenie czeka</p>
 <p style="color: #A9A397">Dołącz do grupy sygnałowej na Telegramie. Podsumowanie miesiąca wyślemy na podany adres e-mail.</p>
 <div class="invite">
 <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path fill="#26A5E4" d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"></path></svg>
@@ -346,6 +354,7 @@
 </main>
 
 <!-- ============ FOOTER ============ -->
+<a class="mbar btn btn-gold" href="#dolacz" aria-hidden="true" tabindex="-1">Dołącz do grupy</a>
 <footer class="foot">
 <div class="wrap">
 <div class="c" data-s="7">
@@ -364,7 +373,7 @@
 <h4>Kontakt</h4>
 <address>
 <a href="tel:+48222571194">+48 22 257 11 94</a>
-<a href="mailto:okazjanaflipa@gmail.com">okazjanaflipa@gmail.com</a>
+<span class="mail-row"><a href="mailto:okazjanaflipa@gmail.com">okazjanaflipa@gmail.com</a><button class="copy" type="button" data-copy="okazjanaflipa@gmail.com">Kopiuj</button></span>
 </address>
 </div>
 <div>
@@ -392,6 +401,6 @@
 </footer>
 
 </div>
-<script src="assets/app.js?v=3" defer></script>
+<script src="assets/app.js?v=4" defer></script>
 </body>
 </html>
