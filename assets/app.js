@@ -142,11 +142,10 @@
   } else if (!params.has('skeleton')) {
     const portrait = new Image();
     const imgReady = new Promise((res) => { portrait.onload = portrait.onerror = res; portrait.src = 'assets/grzegorz.jpg'; });
-    const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
     const minDelay = Promise.resolve(); // no artificial wait: the skeleton shows only while the page really loads
-    const cap = new Promise((res) => setTimeout(res, 2500));
-    Promise.race([Promise.all([imgReady, fontsReady, minDelay]), cap]).then(() => {
-      for (let i = 1; i <= 8; i++) setTimeout(() => { reveal(i); if (i === 8) finish(); }, (i - 1) * 90);
+    const cap = new Promise((res) => setTimeout(res, 1200)); // never hold real content longer than this
+    Promise.race([Promise.all([imgReady, minDelay]), cap]).then(() => {
+      for (let i = 1; i <= 8; i++) setTimeout(() => { reveal(i); if (i === 8) finish(); }, (i - 1) * 60);
     });
   }
 
@@ -157,7 +156,7 @@
   }
 
   // ---- blurred previews: fade each photo in over its blur once it has loaded ----
-  document.querySelectorAll('.portrait .ph img, .film > img').forEach((img) => {
+  document.querySelectorAll('.portrait .ph img, .film img').forEach((img) => {
     const done = () => img.classList.add('is-loaded');
     if (img.complete && img.naturalWidth) done();
     else { img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true }); }
@@ -169,9 +168,11 @@
   const opener = document.querySelector('[data-open-menu]');
   let menuEntry = false; // true while our history entry for the open menu is on the stack
 
+  const behind = () => [...document.body.children].filter((el) => el !== menu && el.tagName !== 'SCRIPT');
   function showMenu(open) {
     menu.hidden = !open;
     document.body.style.overflow = open ? 'hidden' : '';
+    behind().forEach((el) => { el.inert = open; });
     if (panel) { panel.classList.remove('leaving', 'dragging'); panel.style.transform = ''; }
     if (open) { const c = menu.querySelector('[data-close-menu]'); if (c) c.focus(); }
     else if (opener) opener.focus();
@@ -205,7 +206,7 @@
   if (panel) {
     let y0 = 0, t0 = 0, dy = 0, dragging = false;
     panel.addEventListener('pointerdown', (e) => {
-      if (e.pointerType === 'mouse' || e.target.closest('a, button')) return;
+      if (e.pointerType === 'mouse' || !e.target.closest('.menu-top, .grab')) return; // drag from the handle; the list itself scrolls
       dragging = true; y0 = e.clientY; t0 = performance.now(); dy = 0;
       panel.classList.add('dragging');
       try { panel.setPointerCapture(e.pointerId); } catch (_) { /* pointer already gone: the drag still works without capture */ }
