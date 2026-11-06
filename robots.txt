@@ -1,0 +1,29 @@
+# grzegorzdzikiewicz.pl
+# Everything is public. AI search crawlers are allowed so the site can be cited
+# in ChatGPT Search, Claude, Perplexity and Google AI Overviews.
+
+User-agent: *
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+Sitemap: https://grzegorzdzikiewicz.pl/sitemap.xml

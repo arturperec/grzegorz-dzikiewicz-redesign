@@ -18,7 +18,7 @@
 
     const targets = document.querySelectorAll(
       '.c .man-in > *, .c .sec-head > *, .c .sec-head > div > *, .c .model, .c .n, .c .film-copy > *, .c .film, ' +
-      '.c .steps, .c .perk, .c .form, .c .foot-word > *, .c .foot-g > div');
+      '.c .steps, .c .qa, .c .perk, .c .form, .c .foot-word > *, .c .foot-g > div');
     const seen = new Map();
     targets.forEach((el) => {
       const r = el.getBoundingClientRect();
@@ -143,10 +143,10 @@
     const portrait = new Image();
     const imgReady = new Promise((res) => { portrait.onload = portrait.onerror = res; portrait.src = 'assets/grzegorz.jpg'; });
     const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
-    const minDelay = new Promise((res) => setTimeout(res, 900));
-    const cap = new Promise((res) => setTimeout(res, 4000));
+    const minDelay = Promise.resolve(); // no artificial wait: the skeleton shows only while the page really loads
+    const cap = new Promise((res) => setTimeout(res, 2500));
     Promise.race([Promise.all([imgReady, fontsReady, minDelay]), cap]).then(() => {
-      for (let i = 1; i <= 7; i++) setTimeout(() => { reveal(i); if (i === 7) finish(); }, (i - 1) * 300);
+      for (let i = 1; i <= 8; i++) setTimeout(() => { reveal(i); if (i === 8) finish(); }, (i - 1) * 90);
     });
   }
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  <url>
+    <loc>https://grzegorzdzikiewicz.pl/</loc>
+    <lastmod>2026-11-06</lastmod>
+    <image:image>
+      <image:loc>https://grzegorzdzikiewicz.pl/assets/grzegorz.jpg</image:loc>
+    </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://grzegorzdzikiewicz.pl/assets/video-poster.jpg</video:thumbnail_loc>
+      <video:title>Okazje na flipa z Warszawskim Dealerem Nieruchomości</video:title>
+      <video:description>Grzegorz Dzikiewicz o okazjach na flipa z warszawskiego rynku mieszkań i o wspólnym inwestowaniu.</video:description>
+      <video:player_loc>https://player.vimeo.com/video/940435181</video:player_loc>
+      <video:duration>72</video:duration>
+      <video:publication_date>2024-04-28T12:06:41+00:00</video:publication_date>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://grzegorzdzikiewicz.pl/regulamin/</loc>
+  </url>
+</urlset>
