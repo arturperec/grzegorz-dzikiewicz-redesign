@@ -49,6 +49,7 @@
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('.film[data-vimeo] .play');
     if (!btn) return;
+    e.preventDefault(); // without JS the link opens the film on Vimeo
     const film = btn.closest('.film');
     const id = film.getAttribute('data-vimeo');
     const f = document.createElement('iframe');
