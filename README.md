@@ -21,7 +21,6 @@ No build step: plain HTML, CSS and a small vanilla JS file.
 
 - the sign-up form has no backend yet (it shows the sending and success states only)
 - the Telegram invite link
-- the video file for the "Poznaj mnie i mój zespół" frame
 
 ## SEO and GEO
 
