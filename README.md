@@ -9,6 +9,7 @@ No build step: plain HTML, CSS and a small vanilla JS file.
 - `/` - real skeleton loading: sections reveal in reading order once fonts and the portrait are ready
 - `/?skeleton` - keeps the skeleton loading state on screen
 - `/?instant` - skips the skeleton
+- `/?formfail` - simulates a failed sign-up to show the rollback
 
 ## Structure
 
@@ -19,7 +20,7 @@ No build step: plain HTML, CSS and a small vanilla JS file.
 
 ## Still to wire up
 
-- the sign-up form has no backend yet (it shows the sending and success states only)
+- the sign-up form has no backend yet. Set `SIGNUP_ENDPOINT` in `assets/app.js`: the form POSTs JSON `{name, email, type}` with an `Idempotency-Key` header. The server should store the key and return the first result for any repeat of it, so a retried sign-up is never saved twice
 - the Telegram invite link
 
 ## SEO and GEO
@@ -43,3 +44,13 @@ Prepared for the production domain `https://grzegorzdzikiewicz.pl/`.
 7. Remove the old hidden phone number +48 533 388 533 from the old site's structured data
 8. Fill in the missing "[adres e-mail]" in section 6.3 of the Regulamin
 9. Test with Google's Rich Results Test and the Schema Markup Validator after launch
+
+## Interface details
+
+- skeleton loaders shown only while the page really loads, blurred previews under the photos
+- optimistic sign-up: success shows at once and rolls back with a message if the send fails
+- idempotency key per sign-up, double-submit guard
+- view transitions for the menu, the form result and the process filter
+- mobile menu closes with the back button or Android back gesture, and with a swipe down
+- interruptible CSS motion, all of it off under reduced motion
+- 44px minimum tap targets, safe-area insets for notched phones, equal-width counting numbers, balanced headlines

@@ -410,3 +410,53 @@ html { scroll-behavior: smooth; scroll-padding-top: 96px; }
   .qa .ans { padding-right: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .qa[open] .ans { animation: none; } .pm, .pm::before, .pm::after { transition: none; } }
+
+/* ---------- interface rules pass (v7) ---------- */
+/* 16 tabular numbers: counting figures keep a fixed width */
+.n b, .count, .step-n, .foot address, .facts b { font-variant-numeric: lining-nums tabular-nums; }
+
+/* 17 balanced headlines everywhere */
+.display, .hero-sub, .h3, .step h3, .qa summary h3, .form-t, .foot-name, .model .h3 { text-wrap: balance; }
+
+/* 13 hit slop: small controls get an invisible 44px+ target */
+.lnk::before, .copy::before, .foot address a::before, .foot-b a::before, .foot .map::before {
+  content: ""; position: absolute; inset: -10px -8px;
+}
+.copy, .foot address a, .foot-b a, .foot .map { position: relative; }
+
+/* 14 safe area insets (iPhone notch and home bar) */
+.menu { padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); }
+.foot { padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
+@container (max-width: 720px) {
+  .wrap { padding-inline: max(22px, env(safe-area-inset-left)) max(22px, env(safe-area-inset-right)); }
+  .mbar { left: max(16px, env(safe-area-inset-left)); right: max(16px, env(safe-area-inset-right)); bottom: calc(16px + env(safe-area-inset-bottom)); }
+}
+
+/* 8 blurred previews while photos load */
+.portrait .ph { --lqip: url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBMRXhpZgAATU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAGKADAAQAAAABAAAAGAAAAAD/7QA4UGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAAA4QklNBCUAAAAAABDUHYzZjwCyBOmACZjs+EJ+/8IAEQgAGAAYAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAMCBAEFAAYHCAkKC//EAMMQAAEDAwIEAwQGBAcGBAgGcwECAAMRBBIhBTETIhAGQVEyFGFxIweBIJFCFaFSM7EkYjAWwXLRQ5I0ggjhU0AlYxc18JNzolBEsoPxJlQ2ZJR0wmDShKMYcOInRTdls1V1pJXDhfLTRnaA40dWZrQJChkaKCkqODk6SElKV1hZWmdoaWp3eHl6hoeIiYqQlpeYmZqgpaanqKmqsLW2t7i5usDExcbHyMnK0NTV1tfY2drg5OXm5+jp6vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAQIAAwQFBgcICQoL/8QAwxEAAgIBAwMDAgMFAgUCBASHAQACEQMQEiEEIDFBEwUwIjJRFEAGMyNhQhVxUjSBUCSRoUOxFgdiNVPw0SVgwUThcvEXgmM2cCZFVJInotIICQoYGRooKSo3ODk6RkdISUpVVldYWVpkZWZnaGlqc3R1dnd4eXqAg4SFhoeIiYqQk5SVlpeYmZqgo6SlpqeoqaqwsrO0tba3uLm6wMLDxMXGx8jJytDT1NXW19jZ2uDi4+Tl5ufo6ery8/T19vf4+fr/2wBDAAQEBAQEBAgEBAgLCAgICw8LCwsLDxIPDw8PDxIWEhISEhISFhYWFhYWFhYbGxsbGxsfHx8fHyMjIyMjIyMjIyP/2wBDAQUGBgkICQ8ICA8kGRQZJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/2gAMAwEAAhEDEQAAAec6nzb0bJ+hZcy96+fzL3X579mm827Py/A//9oACAEBAAEFAkypEkRvEpukpuFFSkm3jvfdkXWZRJyzazI/o2laET//2gAIAQMRAT8BxwgLtxDhBYyf/9oACAECEQE/AfcmXLLlIZx5f//aAAgBAQAGPwJQtjinR81E2v7DQgeb/iyenyJfOr08utWFg8Hyi1L/AGUqS0dWnm//xAAzEAEAAwACAgICAgMBAQAAAgsBEQAhMUFRYXGBkaGxwfDREOHxIDBAUGBwgJCgsMDQ4P/aAAgBAQABPyHktCY+rFQDVgz6+7xMGqJkScCPN4u8j4PHm9ISlIZ/d/8AfVlD+aFI0SJweeb/AP/aAAwDAQACEQMRAAAQSe1J/8QAMxEBAQEAAwABAgUFAQEAAQEJAQARITEQQVFhIHHwkYGhsdHB4fEwQFBgcICQoLDA0OD/2gAIAQMRAT8QQx3ifuSMgX//2gAIAQIRAT8QxiaEXz+IAA+0DP/aAAgBAQABPxBrUakyqCI4iZcvE2hRxMnmQfVWqXL6IsuCKh80GATpqDBwJIzq47SSpv4vrOQYQiu2sHVkZSvwrWLSVH4B+lFXZYTolA4Hqb//2Q=="); }
+.film { --lqip: url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBMRXhpZgAATU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAGKADAAQAAAABAAAADQAAAAD/7QA4UGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAAA4QklNBCUAAAAAABDUHYzZjwCyBOmACZjs+EJ+/8IAEQgADQAYAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAMCBAEFAAYHCAkKC//EAMMQAAEDAwIEAwQGBAcGBAgGcwECAAMRBBIhBTETIhAGQVEyFGFxIweBIJFCFaFSM7EkYjAWwXLRQ5I0ggjhU0AlYxc18JNzolBEsoPxJlQ2ZJR0wmDShKMYcOInRTdls1V1pJXDhfLTRnaA40dWZrQJChkaKCkqODk6SElKV1hZWmdoaWp3eHl6hoeIiYqQlpeYmZqgpaanqKmqsLW2t7i5usDExcbHyMnK0NTV1tfY2drg5OXm5+jp6vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAQIAAwQFBgcICQoL/8QAwxEAAgIBAwMDAgMFAgUCBASHAQACEQMQEiEEIDFBEwUwIjJRFEAGMyNhQhVxUjSBUCSRoUOxFgdiNVPw0SVgwUThcvEXgmM2cCZFVJInotIICQoYGRooKSo3ODk6RkdISUpVVldYWVpkZWZnaGlqc3R1dnd4eXqAg4SFhoeIiYqQk5SVlpeYmZqgo6SlpqeoqaqwsrO0tba3uLm6wMLDxMXGx8jJytDT1NXW19jZ2uDi4+Tl5ufo6ery8/T19vf4+fr/2wBDAAQEBAQEBAgEBAgLCAgICw8LCwsLDxIPDw8PDxIWEhISEhISFhYWFhYWFhYbGxsbGxsfHx8fHyMjIyMjIyMjIyP/2wBDAQUGBgkICQ8ICA8kGRQZJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCT/2gAMAwEAAhEDEQAAAfYOItfK0u0c83cZdX//2gAIAQEAAQUCuIwp3GKVWEOUF3MtCL5SCdsule5f/9oACAEDEQE/ARJhEkWH/9oACAECEQE/AZR5TF//2gAIAQEABj8Cq6FQDkWvWhZW8CnU01+bVHTirF//xAAzEAEAAwACAgICAgMBAQAAAgsBEQAhMUFRYXGBkaGxwfDREOHxIDBAUGBwgJCgsMDQ4P/aAAgBAQABPyELypJJBPhpIuR+qPWdcfik5XevPpZ4ltfWH8X/2gAMAwEAAhEDEQAAELpv/8QAMxEBAQEAAwABAgUFAQEAAQEJAQARITEQQVFhIHHwkYGhsdHB4fEwQFBgcICQoLDA0OD/2gAIAQMRAT8QIOCHhf/aAAgBAhEBPxBFC2C63//aAAgBAQABPxCQEEyz8B/VMj7CDBJs9+GoTkSdTkx/RZMHHogJY0wlCgBXpk0YKEleQrHmXnnb/9k="); }
+.portrait .ph::before, .film::before { content: ""; position: absolute; inset: -24px; background: var(--lqip) center / cover no-repeat; filter: blur(18px) saturate(.9); }
+.portrait .ph img, .film > img { position: relative; z-index: 1; }
+.js .portrait .ph img:not(.is-loaded), .js .film > img:not(.is-loaded) { opacity: 0; }
+.portrait .ph img, .film > img { transition: opacity .6s ease, transform 1.2s cubic-bezier(.2,.7,.2,1), filter .6s ease; }
+.portrait .ph::after { z-index: 2; }
+.film .play { z-index: 2; }
+.film.playing::before { display: none; }
+
+/* 9 view transitions (menu, form success, path filter) */
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .32s; animation-timing-function: cubic-bezier(.2,.7,.2,1); }
+
+/* 10 + 11 swipe-to-dismiss menu with interruptible motion */
+.menu { touch-action: pan-x; animation: menu-in .38s cubic-bezier(.2,.7,.2,1) both; transition: transform .38s cubic-bezier(.2,.7,.2,1), opacity .38s ease; }
+.menu.dragging { transition: none; }
+.menu.leaving { transform: translateY(100%); opacity: .6; }
+@keyframes menu-in { from { transform: translateY(-14px); opacity: 0; } to { transform: none; opacity: 1; } }
+.grab { display: block; width: 40px; height: 4px; border-radius: 2px; background: rgba(237,231,220,.28); margin: 0 auto 4px; }
+
+/* 2 optimistic form: inline error if the send fails */
+.form-err { margin: 0; padding: 12px 14px; border: 1px solid rgba(224,134,107,.5); color: #F0B3A1; font-size: 14px; line-height: 1.5; }
+
+@media (prefers-reduced-motion: reduce) {
+  .menu { animation: none; transition: none; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}

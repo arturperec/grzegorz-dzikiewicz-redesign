@@ -1,6 +1,6 @@
 // Grzegorz Dzikiewicz - static prototype behaviour.
 // Skeleton loading: sections reveal in reading order once fonts and the hero portrait are ready.
-// Demo switches: ?skeleton keeps the skeleton on screen, ?instant skips it.
+// Demo switches: ?skeleton keeps the skeleton on screen, ?instant skips it, ?formfail shows the sign-up rollback.
 (function () {
   const root = document.documentElement;
   const params = new URLSearchParams(location.search);
@@ -114,7 +114,7 @@
   }
   document.addEventListener('click', (e) => {
     const b = e.target.closest('.path [data-path]');
-    if (b) setPath(b.dataset.path);
+    if (b) transition(() => setPath(b.dataset.path));
     const m = e.target.closest('[data-set-path]');
     if (m) setPath(m.dataset.setPath);
   });
@@ -150,21 +150,87 @@
     });
   }
 
-  // mobile menu
+  // ---- view transitions: smooth state swaps where the browser supports them ----
+  function transition(update) {
+    if (calm || !document.startViewTransition) { update(); return; }
+    document.startViewTransition(update);
+  }
+
+  // ---- blurred previews: fade each photo in over its blur once it has loaded ----
+  document.querySelectorAll('.portrait .ph img, .film > img').forEach((img) => {
+    const done = () => img.classList.add('is-loaded');
+    if (img.complete && img.naturalWidth) done();
+    else { img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true }); }
+  });
+
+  // ---- mobile menu: back gesture closes it, swipe down dismisses it ----
   const menu = document.querySelector('.menu-w');
+  const panel = menu && menu.querySelector('.menu');
   const opener = document.querySelector('[data-open-menu]');
-  function setMenu(open) {
-    if (!menu) return;
+  let menuEntry = false; // true while our history entry for the open menu is on the stack
+
+  function showMenu(open) {
     menu.hidden = !open;
     document.body.style.overflow = open ? 'hidden' : '';
+    if (panel) { panel.classList.remove('leaving', 'dragging'); panel.style.transform = ''; }
     if (open) { const c = menu.querySelector('[data-close-menu]'); if (c) c.focus(); }
     else if (opener) opener.focus();
   }
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('[data-open-menu]')) setMenu(true);
-    else if (e.target.closest('[data-close-menu]')) setMenu(false);
+  function openMenu() {
+    if (!menu || !menu.hidden) return;
+    history.pushState({ menu: true }, '');
+    menuEntry = true;
+    showMenu(true);
+  }
+  // how: 'button' (also Escape and swipe) pops our history entry, 'link' keeps it so the anchor jump still works
+  function closeMenu(how) {
+    if (!menu || menu.hidden) return;
+    showMenu(false);
+    if (how === 'button' && menuEntry) { menuEntry = false; history.back(); }
+    else menuEntry = false;
+  }
+  addEventListener('popstate', () => {
+    // Android predictive back and the browser back button land here
+    if (menu && !menu.hidden) { menuEntry = false; showMenu(false); }
   });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu && !menu.hidden) setMenu(false); });
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-open-menu]')) openMenu();
+    else {
+      const c = e.target.closest('[data-close-menu]');
+      if (c) closeMenu(c.tagName === 'A' && c.getAttribute('href').startsWith('#') ? 'link' : 'button');
+    }
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu && !menu.hidden) closeMenu('button'); });
+
+  if (panel) {
+    let y0 = 0, t0 = 0, dy = 0, dragging = false;
+    panel.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' || e.target.closest('a, button')) return;
+      dragging = true; y0 = e.clientY; t0 = performance.now(); dy = 0;
+      panel.classList.add('dragging');
+      try { panel.setPointerCapture(e.pointerId); } catch (_) { /* pointer already gone: the drag still works without capture */ }
+    });
+    panel.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      dy = Math.max(0, e.clientY - y0); // only downward
+      panel.style.transform = 'translateY(' + dy + 'px)';
+    });
+    const end = () => {
+      if (!dragging) return;
+      dragging = false;
+      panel.classList.remove('dragging');
+      const v = dy / Math.max(1, performance.now() - t0); // px per ms
+      if (dy > 120 || v > 0.6) {
+        panel.style.transform = '';
+        panel.classList.add('leaving');
+        setTimeout(() => closeMenu('button'), calm ? 0 : 280);
+      } else {
+        panel.style.transform = ''; // springs back; the CSS transition can be interrupted by a new drag
+      }
+    };
+    panel.addEventListener('pointerup', end);
+    panel.addEventListener('pointercancel', end);
+  }
 
   // video: swap the poster for the Vimeo player on click (no third-party load until then)
   document.addEventListener('click', (e) => {
@@ -190,29 +256,61 @@
     b.parentElement.querySelectorAll('[data-type]').forEach((x) => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
   });
 
-  // sign-up form (prototype: no backend yet)
+  // ---- sign-up form: optimistic success, rolled back if the send fails ----
+  // Set SIGNUP_ENDPOINT to the real API when the backend exists. Until then sends are simulated.
+  const SIGNUP_ENDPOINT = '';
   const form = document.getElementById('join-form');
+  const newKey = () => (window.crypto && crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(16).slice(2));
+  let idemKey = newKey(); // one key per submission: retries of the same sign-up reuse it, so the server never stores it twice
+  let inFlight = false;
+
+  function sendSignup(data) {
+    if (!SIGNUP_ENDPOINT) return new Promise((res, rej) => setTimeout(params.has('formfail') ? () => rej(new Error('demo')) : res, 600)); // ?formfail demos the rollback
+    return fetch(SIGNUP_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Idempotency-Key': idemKey },
+      body: JSON.stringify(data)
+    }).then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); });
+  }
+
   if (form) {
-    form.addEventListener('input', (e) => e.target.classList.remove('invalid'));
+    const idle = document.querySelector('.form-idle');
+    const sent = document.querySelector('.form-sent');
+    const err = form.querySelector('.form-err');
+    const btn = form.querySelector('button[type=submit]');
+    form.addEventListener('input', (e) => { e.target.classList.remove('invalid'); if (err) err.hidden = true; });
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      if (inFlight) return; // double-click guard
       const bad = [...form.querySelectorAll('input[required]')].filter((i) => !i.checkValidity());
       bad.forEach((i) => i.classList.add('invalid'));
       if (bad.length) { bad[0].focus(); return; }
-      const btn = form.querySelector('button[type=submit]');
+
+      const pressed = form.querySelector('.seg [aria-pressed=true]');
+      const data = {
+        name: form.querySelector('#f-name').value.trim(),
+        email: form.querySelector('#f-mail').value.trim(),
+        type: pressed ? pressed.dataset.type : null
+      };
+      inFlight = true;
       btn.disabled = true;
-      btn.querySelector('.when-idle').hidden = true;
-      btn.querySelector('.when-sending').hidden = false;
-      setTimeout(() => {
-        document.querySelector('.form-idle').hidden = true;
-        const name = (form.querySelector('#f-name').value || '').trim().split(/\s+/)[0];
-        const hello = document.querySelector('.form-sent .hello');
-        if (hello && name) hello.textContent = ', ' + name;
-        const sent = document.querySelector('.form-sent');
-        sent.hidden = false;
-        const t = sent.querySelector('.form-t');
-        if (t) { t.setAttribute('tabindex', '-1'); t.focus(); }
-      }, 1400);
+
+      // optimistic: show the success state right away
+      const name = data.name.split(/\s+/)[0];
+      const hello = sent.querySelector('.hello');
+      if (hello) hello.textContent = name ? ', ' + name : '';
+      transition(() => { idle.hidden = true; sent.hidden = false; });
+      const t = sent.querySelector('.form-t');
+      if (t) { t.setAttribute('tabindex', '-1'); t.focus(); }
+
+      sendSignup(data).then(() => {
+        idemKey = newKey(); // next sign-up is a new submission
+      }).catch(() => {
+        // roll back: bring the filled-in form back with a message. The same key is kept for the retry.
+        transition(() => { sent.hidden = true; idle.hidden = false; });
+        if (err) { err.textContent = 'Nie udało się wysłać zgłoszenia. Sprawdź połączenie i spróbuj ponownie.'; err.hidden = false; }
+        btn.focus();
+      }).finally(() => { inFlight = false; btn.disabled = false; });
     });
   }
 })();
