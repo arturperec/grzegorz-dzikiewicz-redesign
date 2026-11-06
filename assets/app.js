@@ -273,12 +273,38 @@
     const sent = document.querySelector('.form-sent');
     const err = form.querySelector('.form-err');
     const btn = form.querySelector('button[type=submit]');
-    form.addEventListener('input', (e) => { e.target.classList.remove('invalid'); if (err) err.hidden = true; });
+    // ---- inline field errors: what is wrong and how to fix it, next to the field ----
+    const message = (input) => {
+      const v = input.validity;
+      if (input.type === 'checkbox') return v.valueMissing ? 'Zaznacz zgodę, żebyśmy mogli wysyłać Ci okazje na e‑mail.' : '';
+      if (input.type === 'email') {
+        if (v.valueMissing) return 'Wpisz adres e‑mail, na który wyślemy podsumowanie okazji.';
+        if (v.typeMismatch) return 'Ten adres wygląda na niepełny. Sprawdź go, np. anna@twojadomena.pl.';
+        return '';
+      }
+      return v.valueMissing || !input.value.trim() ? 'Wpisz swoje imię.' : '';
+    };
+    const show = (input) => {
+      const msg = message(input);
+      const box = document.getElementById(input.id + '-err');
+      input.classList.toggle('invalid', !!msg);
+      if (msg) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+      if (box) { box.textContent = msg; box.hidden = !msg; }
+      return !msg;
+    };
+    const fields = [...form.querySelectorAll('input[required]')];
+    // while a field shows an error, re-check it as the person types so the message updates or clears
+    form.addEventListener('input', (e) => {
+      if (err) err.hidden = true;
+      if (e.target.getAttribute('aria-invalid') === 'true') show(e.target);
+    });
+    form.addEventListener('change', (e) => { if (e.target.type === 'checkbox' && e.target.getAttribute('aria-invalid') === 'true') show(e.target); });
+    // a typed-but-wrong e-mail is flagged when leaving the field; an empty field is not nagged until submit
+    form.querySelector('#f-mail').addEventListener('blur', (e) => { if (e.target.value.trim()) show(e.target); });
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       if (inFlight) return; // double-click guard
-      const bad = [...form.querySelectorAll('input[required]')].filter((i) => !i.checkValidity());
-      bad.forEach((i) => i.classList.add('invalid'));
+      const bad = fields.filter((i) => !show(i));
       if (bad.length) { bad[0].focus(); return; }
 
       const pressed = form.querySelector('.seg [aria-pressed=true]');

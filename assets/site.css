@@ -498,3 +498,11 @@ a, button, summary, input, label { touch-action: manipulation; -webkit-tap-highl
 .no-js .media-sk { display: none; }
 .n b .count { font: inherit; letter-spacing: inherit; }
 .foot-word .over::before { content: none; }
+
+/* ---------- inline field errors (v10) ---------- */
+.field-err { display: flex; gap: 8px; align-items: flex-start; margin: 2px 0 0; font-size: 13.5px; line-height: 1.45; color: #F0B3A1; }
+.field-err::before { content: "!"; flex: none; width: 16px; height: 16px; margin-top: 1px; border-radius: 50%; border: 1px solid currentColor; display: grid; place-items: center; font: 600 10px/1 var(--ff); }
+.field-err[hidden] { display: none; }
+.consent + .field-err { margin-top: -18px; padding-left: 32px; }
+.consent input.invalid { outline: 1.5px solid #E0866B; outline-offset: 2px; }
+.field input.invalid:focus { border-bottom-color: #E0866B; }
