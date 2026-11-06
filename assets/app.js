@@ -168,7 +168,14 @@
   const opener = document.querySelector('[data-open-menu]');
   let menuEntry = false; // true while our history entry for the open menu is on the stack
 
-  const behind = () => [...document.body.children].filter((el) => el !== menu && el.tagName !== 'SCRIPT');
+  // everything that is not the menu or one of its ancestors: at each level up to <body>, the siblings
+  const behind = () => {
+    const out = [];
+    for (let node = menu; node && node !== document.body; node = node.parentElement) {
+      [...node.parentElement.children].forEach((el) => { if (el !== node && el.tagName !== 'SCRIPT') out.push(el); });
+    }
+    return out;
+  };
   function showMenu(open) {
     menu.hidden = !open;
     document.body.style.overflow = open ? 'hidden' : '';
