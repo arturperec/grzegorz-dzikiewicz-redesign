@@ -6,9 +6,8 @@ No build step: plain HTML, CSS and a small vanilla JS file.
 
 ## Demo switches
 
-- `/` - real skeleton loading: sections reveal in reading order once fonts and the portrait are ready
-- `/?skeleton` - keeps the skeleton loading state on screen
-- `/?instant` - skips the skeleton
+- `/` - text shows immediately; the portrait and video poster show a shimmer and a blurred preview until they load
+- `/?skeleton` - shows the full-page skeleton loading state (for demos)
 - `/?formfail` - simulates a failed sign-up to show the rollback
 
 ## Structure
@@ -47,7 +46,8 @@ Prepared for the production domain `https://grzegorzdzikiewicz.pl/`.
 
 ## Interface details
 
-- skeleton loaders shown only while the page really loads, blurred previews under the photos
+- text never waits: skeletons only on the photos and video while they load, blurred previews under them
+- fonts self-hosted in `assets/fonts` (Cormorant Garamond, Inter, SIL Open Font License): no requests to Google, so no visitor IPs sent to a third party
 - optimistic sign-up: success shows at once and rolls back with a message if the send fails
 - idempotency key per sign-up, double-submit guard
 - view transitions for the menu, the form result and the process filter

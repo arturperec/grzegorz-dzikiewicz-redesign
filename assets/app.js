@@ -1,6 +1,6 @@
 // Grzegorz Dzikiewicz - static prototype behaviour.
-// Skeleton loading: sections reveal in reading order once fonts and the hero portrait are ready.
-// Demo switches: ?skeleton keeps the skeleton on screen, ?instant skips it, ?formfail shows the sign-up rollback.
+// Text renders immediately. Skeletons exist only for things that really load (photos, video) and for the ?skeleton demo.
+// Demo switches: ?skeleton shows the full-page skeleton state, ?formfail shows the sign-up rollback.
 (function () {
   const root = document.documentElement;
   const params = new URLSearchParams(location.search);
@@ -127,26 +127,13 @@
     if (navigator.clipboard) navigator.clipboard.writeText(b.dataset.copy).then(done, () => {});
   });
 
-  function reveal(step) {
-    document.querySelectorAll('[data-s="' + step + '"]').forEach((el) => el.classList.add('done'));
-  }
-  function finish() {
-    root.classList.remove('sk-on');
-    if (main) main.setAttribute('aria-busy', 'false');
-    if (live) live.textContent = 'Strona załadowana';
+  if (params.has('skeleton')) {
+    // demo: the whole-page skeleton state, kept on screen
+    root.classList.add('sk-on');
+    if (main) main.setAttribute('aria-busy', 'true');
+    if (live) live.textContent = 'Ładowanie strony…';
+  } else {
     afterLoad();
-  }
-
-  if (params.has('instant')) {
-    finish();
-  } else if (!params.has('skeleton')) {
-    const portrait = new Image();
-    const imgReady = new Promise((res) => { portrait.onload = portrait.onerror = res; portrait.src = 'assets/grzegorz.jpg'; });
-    const minDelay = Promise.resolve(); // no artificial wait: the skeleton shows only while the page really loads
-    const cap = new Promise((res) => setTimeout(res, 1200)); // never hold real content longer than this
-    Promise.race([Promise.all([imgReady, minDelay]), cap]).then(() => {
-      for (let i = 1; i <= 8; i++) setTimeout(() => { reveal(i); if (i === 8) finish(); }, (i - 1) * 60);
-    });
   }
 
   // ---- view transitions: smooth state swaps where the browser supports them ----
@@ -157,7 +144,7 @@
 
   // ---- blurred previews: fade each photo in over its blur once it has loaded ----
   document.querySelectorAll('.portrait .ph img, .film img').forEach((img) => {
-    const done = () => img.classList.add('is-loaded');
+    const done = () => { img.classList.add('is-loaded'); const frame = img.closest('.ph, .film'); if (frame) frame.classList.add('is-loaded'); };
     if (img.complete && img.naturalWidth) done();
     else { img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true }); }
   });
