@@ -45,6 +45,22 @@
   });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu && !menu.hidden) setMenu(false); });
 
+  // video: swap the poster for the Vimeo player on click (no third-party load until then)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.film[data-vimeo] .play');
+    if (!btn) return;
+    const film = btn.closest('.film');
+    const id = film.getAttribute('data-vimeo');
+    const f = document.createElement('iframe');
+    f.src = 'https://player.vimeo.com/video/' + id + '?autoplay=1&title=0&byline=0&portrait=0&dnt=1&color=C9A96E';
+    f.title = 'Okazje na flipa z Warszawskim Dealerem Nieruchomości';
+    f.allow = 'autoplay; fullscreen; picture-in-picture';
+    f.allowFullscreen = true;
+    f.className = 'film-player';
+    film.replaceChildren(f);
+    film.classList.add('playing');
+  });
+
   // segmented investor type
   document.addEventListener('click', (e) => {
     const b = e.target.closest('.seg [data-type]');
